@@ -4,12 +4,12 @@ import "./css/App.css";
 import * as BooksAPI from "./BooksAPI";
 import _ from "lodash";
 import * as PropTypes from "prop-types";
+import Book from "./Book";
 
 const SearchBooks = ({books, refreshBooks}) => {
-    //console.log("books on search book", books);
     const [searchResult, setSearchResult] = useState([]);
     const [query, setQuery] = useState("");
-    const [selectedShelf, setSelectedShelf] = useState({});
+
 
     // Function to merge current book shelf with search result
     const mergeArrays = (arrayA, arrayB) => {
@@ -30,8 +30,12 @@ const SearchBooks = ({books, refreshBooks}) => {
     const fetchBooks = async (query) => {
         try {
             const response = await BooksAPI.search(query);
-            const result = mergeArrays(books, response);
-            setSearchResult(result || []);
+            if (response && response.length > 0) {
+                const result = mergeArrays(books, response);
+                setSearchResult(result || []);
+            } else {
+                setSearchResult([]);
+            }
         } catch (err) {
             console.error(err);
         }
@@ -41,26 +45,11 @@ const SearchBooks = ({books, refreshBooks}) => {
 
     const updateQuery = (query) => {
         setQuery(query);
-        if (query.trim() !== "") {
-            debouncedFetchBooks(query);
-        } else {
+        if (query.trim() === "") {
             setSearchResult([]);
-        }
-    };
-
-    // Handle the select change
-    const handleShelfChange = async (event, bookId) => {
-        const newShelf = event.target.value;
-
-        setSelectedShelf((prev) => ({
-            ...prev,
-            [bookId]: newShelf,
-        }));
-        try {
-            const response = await BooksAPI.update({id: bookId}, newShelf);
-            console.log('Book updated successfully', response);
-        } catch (error) {
-            console.error('Error updating the book shelf:', error);
+            debouncedFetchBooks.cancel();
+        } else {
+            debouncedFetchBooks(query);
         }
     };
 
@@ -88,35 +77,7 @@ const SearchBooks = ({books, refreshBooks}) => {
                 <ol className="books-grid">
                     {searchResult.length > 0 && searchResult?.map((book) => (
                         <li key={book.id}>
-                            <div className="book">
-                                <div className="book-top">
-                                    <div
-                                        className="book-cover"
-                                        style={{
-                                            width: 128,
-                                            height: 193,
-                                            backgroundImage:
-                                                `url(${book.imageLinks?.thumbnail})`,
-                                        }}
-                                    ></div>
-                                    <div className="book-shelf-changer">
-                                        <select value={selectedShelf[book.id] || book.shelf || "none"}
-                                                onChange={(event) => handleShelfChange(event, book.id)}>
-                                            <option value="moveTo" disabled>
-                                                Move to...
-                                            </option>
-                                            <option value="currentlyReading">
-                                                Currently Reading
-                                            </option>
-                                            <option value="wantToRead">Want to Read</option>
-                                            <option value="read">Read</option>
-                                            <option value="none">None</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div className="book-title">{book.title}</div>
-                                <div className="book-authors">{book.authors ? book.authors.join(", ") : "Unknown Author"}</div>
-                            </div>
+                            <Book book={book} refreshBooks={refreshBooks}/>
                         </li>
                     ))}
                 </ol>
