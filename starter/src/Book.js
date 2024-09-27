@@ -2,6 +2,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import "./css/App.css";
 import * as BooksAPI from "./BooksAPI";
+import {Link} from "react-router-dom";
 
 
 const Book = ({book, refreshBooks})=> {
@@ -29,6 +30,7 @@ const Book = ({book, refreshBooks})=> {
     return (
         <div className="book">
             <div className="book-top">
+                <Link to={`/books/${book.id}`}>
                 <div
                     className="book-cover"
                     style={{
@@ -38,10 +40,11 @@ const Book = ({book, refreshBooks})=> {
                             `url(${book.imageLinks?.thumbnail})`,
                     }}
                 ></div>
+                </Link>
                 <div className="book-shelf-changer">
-                    <select value={selectedShelf[book.id] || book.shelf}
+                    <select value={selectedShelf[book.id] || book.shelf || "none"}
                             onChange={(event) => handleShelfChange(event, book.id)}>
-                        <option value="none" disabled>
+                        <option value="moveTo" disabled>
                             Move to...
                         </option>
                         <option value="currentlyReading">

@@ -4,6 +4,8 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import ListBooks from "./ListBooks"
 import SearchBooks from "./SeachBooks";
 import * as BooksAPI from "./BooksAPI";
+import NotFound from "./NotFound";
+import BookDetails from "./BookDetails";
 
 const App = () => {
 
@@ -20,6 +22,7 @@ const App = () => {
   return(
       <BrowserRouter>
       <Routes>
+        <Route path="*" element={<NotFound />} />
         <Route
             exact
             path="/"
@@ -33,6 +36,10 @@ const App = () => {
                   <SearchBooks books={books} refreshBooks={getBooks}/>
               }
           />
+          <Route
+              path="/books/:book_id"
+              element={
+                <BookDetails />} />
       </Routes>
       </BrowserRouter>
   );
