@@ -11,8 +11,8 @@ const App = () => {
 
     const [books, setBooks] = useState([]);
     const getBooks = async () => {
-        const res = await BooksAPI.getAll();
-        setBooks(res);
+        const response = await BooksAPI.getAll();
+        setBooks(response);
     };
 
     useEffect(() => {

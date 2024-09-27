@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import "./css/App.css";
 import Book from "./Book";
+import BookShelf from "./BookShelf";
 
 const ListBooks = ({books, refreshBooks}) => {
 
@@ -17,42 +18,9 @@ const ListBooks = ({books, refreshBooks}) => {
                     </div>
                     <div className="list-books-content">
                         <div>
-                            <div className="bookshelf">
-                                <h2 className="bookshelf-title">Currently Reading</h2>
-                                <div className="bookshelf-books">
-                                    <ol className="books-grid">
-                                    {currentlyReading.map((book) => (
-                                        <li key={book.id}>
-                                            <Book book={book} refreshBooks={refreshBooks}/>
-                                        </li>
-                                    ))}
-                                    </ol>
-                                </div>
-                            </div>
-                            <div className="bookshelf">
-                                <h2 className="bookshelf-title">Want to Read</h2>
-                                <div className="bookshelf-books">
-                                    <ol className="books-grid">
-                                    {wantToRead.map((book) => (
-                                        <li key={book.id}>
-                                            <Book book={book} refreshBooks={refreshBooks}/>
-                                        </li>
-                                    ))}
-                                    </ol>
-                                </div>
-                            </div>
-                            <div className="bookshelf">
-                                <h2 className="bookshelf-title">Read</h2>
-                                <div className="bookshelf-books">
-                                    <ol className="books-grid">
-                                    {readBooks.map((book) => (
-                                        <li key={book.id}>
-                                            <Book book={book} refreshBooks={refreshBooks}/>
-                                        </li>
-                                    ))}
-                                    </ol>
-                                </div>
-                            </div>
+                            <BookShelf bookShelf={currentlyReading} refreshBooks={refreshBooks}/>
+                            <BookShelf bookShelf={wantToRead} refreshBooks={refreshBooks}/>
+                            <BookShelf bookShelf={readBooks} refreshBooks={refreshBooks}/>
                         </div>
                     </div>
                     <div className="open-search">
