@@ -1,3 +1,5 @@
+author: Hieu Tran
+
 How to start the application
 - Install all project dependencies with `npm install`
 - Start the development server with `npm start`
