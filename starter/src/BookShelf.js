@@ -2,7 +2,6 @@ import "./css/App.css";
 import Book from "./Book";
 
 const BookShelf = ({bookShelf,refreshBooks}) => {
-    console.log('bookShelf', bookShelf);
     const shelf = (item)=> {
         switch(item) {
             case 'currentlyReading':
